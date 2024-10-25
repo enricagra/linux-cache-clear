@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Clear APT cache (for Red Hat systems, you may use dnf or yum)
+echo "Clearing package manager cache..."
+sudo dnf clean all  # or `sudo yum clean all` for older systems
+
+# Clear System Memory Cache (RAM)
+echo "Clearing system memory cache..."
+sudo sync
+sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches'
+
+# Clear Swap Memory
+echo "Clearing swap memory..."
+sudo swapoff -a
+sudo swapon -a
+
+# Clear DNS Cache (if using nscd)
+echo "Clearing DNS cache..."
+sudo systemctl restart nscd
+
+# Clear Thumbnail Cache (if applicable)
+echo "Clearing thumbnail cache..."
+rm -rf ~/.cache/thumbnails/*
+
+# Clear Logs (Optional)
+echo "Clearing old logs..."
+sudo journalctl --vacuum-time=2d
+
+echo "All cache cleared!"
